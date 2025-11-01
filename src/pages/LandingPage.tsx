@@ -72,16 +72,15 @@ export default function LandingPage() {
               <Button
                 size="lg"
                 onClick={() => navigate('/login')}
-                className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-6"
+                className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-6 font-semibold"
               >
                 Citizen Login
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
               <Button
                 size="lg"
-                variant="outline"
                 onClick={() => navigate('/official-login')}
-                className="border-2 border-white text-white hover:bg-white/10 text-lg px-8 py-6"
+                className="bg-white/20 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-primary text-lg px-8 py-6 font-semibold transition-all"
               >
                 Official Login
               </Button>
