@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useCertificates, CertificateType } from '@/contexts/CertificateContext';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+import ChatbotWidget from '@/components/ChatbotWidget';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -213,6 +214,7 @@ export default function Apply() {
       </main>
 
       <Footer />
+      <ChatbotWidget />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+import ChatbotWidget from '@/components/ChatbotWidget';
 import { motion } from 'framer-motion';
 import { FileText, Search, MessageCircle, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -122,6 +123,7 @@ export default function Dashboard() {
       </main>
 
       <Footer />
+      <ChatbotWidget />
     </div>
   );
 }

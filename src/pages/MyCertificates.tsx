@@ -3,6 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useCertificates, Certificate } from '@/contexts/CertificateContext';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+import ChatbotWidget from '@/components/ChatbotWidget';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { StatusBadge } from '@/components/StatusBadge';
@@ -200,6 +201,7 @@ export default function MyCertificates() {
       </Dialog>
 
       <Footer />
+      <ChatbotWidget />
     </div>
   );
 }
