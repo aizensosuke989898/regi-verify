@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { motion } from 'framer-motion';
-import { Smartphone, KeyRound, Shield, Loader2 } from 'lucide-react';
+import { Smartphone, KeyRound, Shield, Loader2, ChevronLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function UserLoginForm() {
@@ -63,7 +63,31 @@ export default function UserLoginForm() {
   };
 
   return (
-    <Card className="glass-card p-8 space-y-6">
+    <div className="min-h-screen flex items-center justify-center p-4 gradient-hero relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+      </div>
+
+      <div className="w-full max-w-md relative z-10">
+        <Button
+          variant="ghost"
+          onClick={() => navigate('/')}
+          className="mb-4 text-white hover:bg-white/10"
+        >
+          <motion.div
+            initial={{ x: 0 }}
+            whileHover={{ x: -5 }}
+            transition={{ duration: 0.2 }}
+            className="flex items-center"
+          >
+            <ChevronLeft className="mr-2 h-4 w-4" />
+            Back to Home
+          </motion.div>
+        </Button>
+
+        <Card className="glass-card p-8 space-y-6">
       <div className="text-center space-y-2">
         <div className="inline-flex p-4 rounded-full bg-primary/10 mb-4">
           <Shield className="h-10 w-10 text-primary" />
@@ -181,12 +205,14 @@ export default function UserLoginForm() {
         </form>
       )}
 
-      <div className="pt-4 text-center text-xs text-muted-foreground border-t">
-        <div className="inline-flex items-center gap-1">
-          <Shield className="h-3 w-3" />
-          Secure Login
-        </div>
+          <div className="pt-4 text-center text-xs text-muted-foreground border-t">
+            <div className="inline-flex items-center gap-1">
+              <Shield className="h-3 w-3" />
+              Secure Login
+            </div>
+          </div>
+        </Card>
       </div>
-    </Card>
+    </div>
   );
 }

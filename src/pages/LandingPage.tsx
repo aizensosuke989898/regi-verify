@@ -71,7 +71,7 @@ export default function LandingPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
-                onClick={() => navigate('/login')}
+                onClick={() => navigate('/login/user')}
                 className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-6 font-semibold"
               >
                 Citizen Login
@@ -79,7 +79,7 @@ export default function LandingPage() {
               </Button>
               <Button
                 size="lg"
-                onClick={() => navigate('/login')}
+                onClick={() => navigate('/login/officer')}
                 className="bg-white/20 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-primary text-lg px-8 py-6 font-semibold transition-all"
               >
                 Official Login
@@ -193,7 +193,7 @@ export default function LandingPage() {
             </p>
             <Button
               size="lg"
-              onClick={() => navigate('/login')}
+              onClick={() => navigate('/login/user')}
               className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-6"
             >
               Apply Now

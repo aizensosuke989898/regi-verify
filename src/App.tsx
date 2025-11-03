@@ -8,7 +8,8 @@ import { CertificateProvider } from "@/contexts/CertificateContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 import LandingPage from "./pages/LandingPage";
-import LoginSelector from "./pages/LoginSelector";
+import UserLoginForm from "./components/auth/UserLoginForm";
+import OfficerLoginForm from "./components/auth/OfficerLoginForm";
 import ResetPassword from "./pages/ResetPassword";
 import Dashboard from "./pages/Dashboard";
 import Apply from "./pages/Apply";
@@ -40,7 +41,8 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<LandingPage />} />
-              <Route path="/login" element={<LoginSelector />} />
+              <Route path="/login/user" element={<UserLoginForm />} />
+              <Route path="/login/officer" element={<OfficerLoginForm />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               
               {/* Citizen Routes */}
