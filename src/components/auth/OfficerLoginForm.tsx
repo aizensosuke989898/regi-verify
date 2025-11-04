@@ -9,12 +9,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { motion } from 'framer-motion';
 import { ShieldCheck, User, Lock, Eye, EyeOff, Loader2, AlertTriangle, ChevronLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
+import api from '@/lib/axios';
 
-const mockOfficials = {
-  'officer1': { password: 'pass123', name: 'Amit Sharma', role: 'officer' as const },
-  'senior1': { password: 'pass123', name: 'Priya Singh', role: 'senior' as const },
-  'higher1': { password: 'pass123', name: 'Dr. Rajiv Mehta', role: 'higher' as const },
-};
 
 export default function OfficerLoginForm() {
   const [username, setUsername] = useState('');
@@ -26,7 +22,7 @@ export default function OfficerLoginForm() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (loginAttempts >= 3 && !captchaVerified) {
@@ -36,24 +32,23 @@ export default function OfficerLoginForm() {
 
     setLoading(true);
 
-    // Simulate login delay
-    setTimeout(() => {
-      const official = mockOfficials[username as keyof typeof mockOfficials];
-
-      if (official && official.password === password) {
-        login({
-          id: username,
-          name: official.name,
-          role: official.role,
-        });
-        toast.success(`Welcome back, ${official.name}!`);
-        navigate('/official-dashboard');
-      } else {
-        setLoginAttempts((prev) => prev + 1);
-        toast.error('Invalid credentials');
-        setLoading(false);
-      }
-    }, 1000);
+    try {
+      const res = await api.post('/auth/officer-login', { username, password });
+      localStorage.setItem('officerToken', res.data.token);
+      localStorage.setItem('officerRole', res.data.user.role);
+      login({
+        id: res.data.user.id || username,
+        name: res.data.user.name,
+        role: res.data.user.role,
+      });
+      toast.success(`Welcome back, ${res.data.user.name}!`);
+      navigate('/official-dashboard');
+    } catch (err: any) {
+      setLoginAttempts((prev) => prev + 1);
+      toast.error(err.response?.data?.error || 'Invalid credentials');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -182,16 +177,6 @@ export default function OfficerLoginForm() {
         >
           Forgot Password?
         </Button>
-      </div>
-
-      {/* Demo Credentials */}
-      <div className="bg-muted/50 rounded-lg p-4 text-sm">
-        <p className="font-semibold mb-2">Demo Credentials:</p>
-        <div className="space-y-1 text-muted-foreground">
-          <p>Officer: officer1 / pass123</p>
-          <p>Senior: senior1 / pass123</p>
-          <p>Higher: higher1 / pass123</p>
-        </div>
       </div>
 
           <div className="pt-4 text-center text-xs text-muted-foreground border-t">

@@ -9,6 +9,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { motion } from 'framer-motion';
 import { Smartphone, KeyRound, Shield, Loader2, ChevronLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
+import api from '@/lib/axios';
 
 export default function UserLoginForm() {
   const [step, setStep] = useState<'phone' | 'otp'>('phone');
@@ -19,7 +20,7 @@ export default function UserLoginForm() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSendOTP = (e: React.FormEvent) => {
+  const handleSendOTP = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!captchaVerified) {
@@ -29,34 +30,42 @@ export default function UserLoginForm() {
 
     if (phone.length === 10) {
       setLoading(true);
-      // Simulate OTP sending
-      setTimeout(() => {
-        toast.success('OTP sent to your mobile number!');
+      try {
+        const res = await api.post('/auth/send-otp', { phone });
+        toast.success(`OTP sent! (Dev OTP: ${res.data.otp})`);
         setStep('otp');
+      } catch (err: any) {
+        toast.error(err.response?.data?.error || 'Failed to send OTP');
+      } finally {
         setLoading(false);
-      }, 1000);
+      }
     } else {
       toast.error('Please enter a valid 10-digit phone number');
     }
   };
 
-  const handleVerifyOTP = (e: React.FormEvent) => {
+  const handleVerifyOTP = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (otp.length === 6) {
       setLoading(true);
-      // Simulate verification
-      setTimeout(() => {
+      try {
+        const res = await api.post('/auth/verify-otp', { phone, code: otp });
+        localStorage.setItem('userToken', res.data.token);
         login({
-          id: '1',
-          name: 'Rajesh Kumar',
+          id: res.data.user.id || phone,
+          name: res.data.user.name || 'User',
           phone,
-          email: 'rajesh@example.com',
+          email: res.data.user.email,
           role: 'citizen',
         });
         toast.success('Login successful!');
         navigate('/dashboard');
-      }, 1000);
+      } catch (err: any) {
+        toast.error(err.response?.data?.error || 'Invalid OTP');
+      } finally {
+        setLoading(false);
+      }
     } else {
       toast.error('Please enter a valid 6-digit OTP');
     }
@@ -197,7 +206,14 @@ export default function UserLoginForm() {
           <Button
             type="button"
             variant="link"
-            onClick={() => toast.success('OTP resent!')}
+            onClick={async () => {
+              try {
+                const res = await api.post('/auth/send-otp', { phone });
+                toast.success(`OTP resent! (Dev OTP: ${res.data.otp})`);
+              } catch (err: any) {
+                toast.error(err.response?.data?.error || 'Failed to resend OTP');
+              }
+            }}
             className="w-full text-sm"
           >
             Resend OTP
