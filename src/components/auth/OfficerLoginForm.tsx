@@ -32,23 +32,32 @@ export default function OfficerLoginForm() {
 
     setLoading(true);
 
-    try {
-      const res = await api.post('/auth/officer-login', { username, password });
-      localStorage.setItem('officerToken', res.data.token);
-      localStorage.setItem('officerRole', res.data.user.role);
-      login({
-        id: res.data.user.id || username,
-        name: res.data.user.name,
-        role: res.data.user.role,
-      });
-      toast.success(`Welcome back, ${res.data.user.name}!`);
-      navigate('/official-dashboard');
-    } catch (err: any) {
-      setLoginAttempts((prev) => prev + 1);
-      toast.error(err.response?.data?.error || 'Invalid credentials');
-    } finally {
+    // Simulate API delay
+    setTimeout(() => {
+      if (username && password) {
+        // Determine role based on username
+        let role: 'officer' | 'senior' | 'higher' = 'officer';
+        if (username.toLowerCase().includes('senior')) {
+          role = 'senior';
+        } else if (username.toLowerCase().includes('higher') || username.toLowerCase().includes('admin')) {
+          role = 'higher';
+        }
+
+        localStorage.setItem('officerToken', 'dummy-officer-token');
+        localStorage.setItem('officerRole', role);
+        login({
+          id: username,
+          name: username,
+          role: role,
+        });
+        toast.success(`Welcome back, ${username}!`);
+        navigate('/official-dashboard');
+      } else {
+        setLoginAttempts((prev) => prev + 1);
+        toast.error('Please enter username and password');
+      }
       setLoading(false);
-    }
+    }, 500);
   };
 
   return (

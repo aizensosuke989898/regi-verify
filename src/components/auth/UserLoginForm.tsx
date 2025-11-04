@@ -30,21 +30,12 @@ export default function UserLoginForm() {
 
     if (phone.length === 10) {
       setLoading(true);
-      try {
-        console.log('Sending OTP to:', phone);
-        console.log('API URL:', api.defaults.baseURL);
-        const res = await api.post('/auth/send-otp', { phone });
-        console.log('OTP Response:', res.data);
-        toast.success(`OTP sent! (Dev OTP: ${res.data.otp})`);
+      // Simulate API delay
+      setTimeout(() => {
+        toast.success('OTP sent! (Use 123456 to login)');
         setStep('otp');
-      } catch (err: any) {
-        console.error('OTP Error:', err);
-        console.error('Error response:', err.response);
-        const errorMsg = err.response?.data?.error || err.message || 'Failed to send OTP';
-        toast.error(`Error: ${errorMsg}. Check if backend is running on http://localhost:4000`);
-      } finally {
         setLoading(false);
-      }
+      }, 500);
     } else {
       toast.error('Please enter a valid 10-digit phone number');
     }
@@ -55,23 +46,23 @@ export default function UserLoginForm() {
     
     if (otp.length === 6) {
       setLoading(true);
-      try {
-        const res = await api.post('/auth/verify-otp', { phone, code: otp });
-        localStorage.setItem('userToken', res.data.token);
-        login({
-          id: res.data.user.id || phone,
-          name: res.data.user.name || 'User',
-          phone,
-          email: res.data.user.email,
-          role: 'citizen',
-        });
-        toast.success('Login successful!');
-        navigate('/dashboard');
-      } catch (err: any) {
-        toast.error(err.response?.data?.error || 'Invalid OTP');
-      } finally {
+      // Simulate API delay
+      setTimeout(() => {
+        if (otp === '123456') {
+          localStorage.setItem('userToken', 'dummy-token');
+          login({
+            id: phone,
+            name: 'Test User',
+            phone,
+            role: 'citizen',
+          });
+          toast.success('Login successful!');
+          navigate('/dashboard');
+        } else {
+          toast.error('Invalid OTP. Use 123456');
+        }
         setLoading(false);
-      }
+      }, 500);
     } else {
       toast.error('Please enter a valid 6-digit OTP');
     }
@@ -212,13 +203,8 @@ export default function UserLoginForm() {
           <Button
             type="button"
             variant="link"
-            onClick={async () => {
-              try {
-                const res = await api.post('/auth/send-otp', { phone });
-                toast.success(`OTP resent! (Dev OTP: ${res.data.otp})`);
-              } catch (err: any) {
-                toast.error(err.response?.data?.error || 'Failed to resend OTP');
-              }
+            onClick={() => {
+              toast.success('OTP resent! (Use 123456 to login)');
             }}
             className="w-full text-sm"
           >
