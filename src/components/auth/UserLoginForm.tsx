@@ -31,11 +31,17 @@ export default function UserLoginForm() {
     if (phone.length === 10) {
       setLoading(true);
       try {
+        console.log('Sending OTP to:', phone);
+        console.log('API URL:', api.defaults.baseURL);
         const res = await api.post('/auth/send-otp', { phone });
+        console.log('OTP Response:', res.data);
         toast.success(`OTP sent! (Dev OTP: ${res.data.otp})`);
         setStep('otp');
       } catch (err: any) {
-        toast.error(err.response?.data?.error || 'Failed to send OTP');
+        console.error('OTP Error:', err);
+        console.error('Error response:', err.response);
+        const errorMsg = err.response?.data?.error || err.message || 'Failed to send OTP';
+        toast.error(`Error: ${errorMsg}. Check if backend is running on http://localhost:4000`);
       } finally {
         setLoading(false);
       }
